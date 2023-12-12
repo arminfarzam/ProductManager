@@ -6,7 +6,7 @@ public class ProductDto
 
     public string Name { get; set; } = string.Empty;
 
-    public DateTime ProduceDate { get; set; }
+    public DateOnly ProduceDate { get; set; }
 
     public string ManufacturerEmail { get; set; } = string.Empty;
 

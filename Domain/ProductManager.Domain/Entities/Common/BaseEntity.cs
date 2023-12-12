@@ -6,7 +6,7 @@ public class BaseEntity
 {
     [Key]
     public Guid Id { get; set; }
-    public DateTime CreateDate { get; set; }
-    public DateTime LastModifiedDate { get; set; }
+    public DateOnly CreateDate { get; set; }
+    public DateOnly LastModifiedDate { get; set; }
     public bool IsDeleted { get; set; }
 }

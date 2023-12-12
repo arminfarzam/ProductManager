@@ -30,17 +30,21 @@ public class ProductManagerContext:IdentityDbContext
 
     }
 
+    #region Overrides
+
     public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
     {
         foreach (var entry in ChangeTracker.Entries<BaseEntity>())
         {
-            entry.Entity.LastModifiedDate = DateTime.Now;
+            entry.Entity.LastModifiedDate = DateOnly.FromDateTime(DateTime.Now);
 
             if (entry.State == EntityState.Added)
             {
-                entry.Entity.CreateDate = DateTime.Now;
+                entry.Entity.CreateDate = DateOnly.FromDateTime(DateTime.Now);
             }
         }
         return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
     }
+
+    #endregion
 }
