@@ -13,15 +13,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IoC", "IoC", "{87ED6BB4-A3A
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{FC1479CA-3BC5-4C21-A688-DFB158E619E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductManager.Api", "Presentation\ProductManager.Api\ProductManager.Api.csproj", "{87C7BDB3-8BF0-49A7-9E7D-1162ECFF13C2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductManager.Api", "Presentation\ProductManager.Api\ProductManager.Api.csproj", "{87C7BDB3-8BF0-49A7-9E7D-1162ECFF13C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductManager.IoC", "IoC\ProductManager.IoC\ProductManager.IoC.csproj", "{0B3B244D-DA9C-46DE-AF6A-4D517D97311E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductManager.IoC", "IoC\ProductManager.IoC\ProductManager.IoC.csproj", "{0B3B244D-DA9C-46DE-AF6A-4D517D97311E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductManager.Domain", "Domain\ProductManager.Domain\ProductManager.Domain.csproj", "{066BDB1E-1F72-44F7-9CE9-E4F29A2D158F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductManager.Domain", "Domain\ProductManager.Domain\ProductManager.Domain.csproj", "{066BDB1E-1F72-44F7-9CE9-E4F29A2D158F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductManager.Data", "Data\ProductManager.Data\ProductManager.Data.csproj", "{99813987-C699-4333-BE05-240D492E077B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductManager.Data", "Data\ProductManager.Data\ProductManager.Data.csproj", "{99813987-C699-4333-BE05-240D492E077B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductManager.Application", "Application\ProductManager.Application\ProductManager.Application.csproj", "{CED8FA0B-4F07-48A5-9B33-4588A5F75D32}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductManager.Application", "Application\ProductManager.Application\ProductManager.Application.csproj", "{CED8FA0B-4F07-48A5-9B33-4588A5F75D32}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{703D1E4D-9AD9-444D-B88D-B2614B3EFCC4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{91E27121-02EB-4AE4-8971-F8F1EE09DB99}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -54,6 +58,11 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{FAE96F1B-033F-47BA-AF9E-42017918FE22} = {703D1E4D-9AD9-444D-B88D-B2614B3EFCC4}
+		{EE87FEBF-D413-4783-88BC-22A0E51967FD} = {703D1E4D-9AD9-444D-B88D-B2614B3EFCC4}
+		{FC3281D1-EA10-469A-B4F5-DD50385EE68A} = {703D1E4D-9AD9-444D-B88D-B2614B3EFCC4}
+		{87ED6BB4-A3A9-4B37-81DD-303211D3BFCE} = {703D1E4D-9AD9-444D-B88D-B2614B3EFCC4}
+		{FC1479CA-3BC5-4C21-A688-DFB158E619E6} = {703D1E4D-9AD9-444D-B88D-B2614B3EFCC4}
 		{87C7BDB3-8BF0-49A7-9E7D-1162ECFF13C2} = {FAE96F1B-033F-47BA-AF9E-42017918FE22}
 		{0B3B244D-DA9C-46DE-AF6A-4D517D97311E} = {87ED6BB4-A3A9-4B37-81DD-303211D3BFCE}
 		{066BDB1E-1F72-44F7-9CE9-E4F29A2D158F} = {FC1479CA-3BC5-4C21-A688-DFB158E619E6}

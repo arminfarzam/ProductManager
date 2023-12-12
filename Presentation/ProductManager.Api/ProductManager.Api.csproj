@@ -21,10 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\IoC\ProductManager.IoC\ProductManager.IoC.csproj" />
   </ItemGroup>
 
