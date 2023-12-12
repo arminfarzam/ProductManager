@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProductManager.Data.Context;
 
@@ -11,9 +12,11 @@ using ProductManager.Data.Context;
 namespace ProductManager.Data.Migrations
 {
     [DbContext(typeof(ProductManagerContext))]
-    partial class ProductManagerContextModelSnapshot : ModelSnapshot
+    [Migration("20231212153944_ChangeCreatorIdToCreatoUserNameInProduct")]
+    partial class ChangeCreatorIdToCreatoUserNameInProduct
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -226,9 +229,6 @@ namespace ProductManager.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreateDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("CreatorUserName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -238,9 +238,6 @@ namespace ProductManager.Data.Migrations
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastModifiedDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("ManufacturerEmail")
                         .IsRequired()
@@ -254,9 +251,12 @@ namespace ProductManager.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("ProduceDate")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("CreateDate", "ManufacturerEmail")
+                    b.HasIndex("ProduceDate", "ManufacturerEmail")
                         .IsUnique()
                         .HasDatabaseName("ProductIndex");
 

@@ -8,8 +8,14 @@
 
   <ItemGroup>
     <Folder Include="DTOs\Configuration\" />
+    <Folder Include="DTOs\Paging\" />
     <Folder Include="Features\Authentication\Command\" />
+    <Folder Include="Features\Product\Command\" />
+    <Folder Include="Features\Product\Query\" />
+    <Folder Include="Mapping\" />
     <Folder Include="Services\Interfaces\" />
+    <Folder Include="Utilities\Extensions\Identity\" />
+    <Folder Include="Utilities\Paging\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -18,6 +24,10 @@
     <PackageReference Include="MediatR" Version="12.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Domain\ProductManager.Domain\ProductManager.Domain.csproj" />
   </ItemGroup>
 
 </Project>

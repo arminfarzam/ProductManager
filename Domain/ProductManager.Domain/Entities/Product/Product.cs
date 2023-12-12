@@ -1,26 +1,24 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using ProductManager.Domain.Entities.Common;
 
 namespace ProductManager.Domain.Entities.Product;
 
-public class Product
+public class Product:BaseEntity
 {
-    public Guid ProductId { get; set; }
 
     [Required] 
-    public string Name { get; set; } = string.Empty;
+    public string Name { get; set; } = null!;
 
-    public DateTime ProduceDate { get; set; }
-
-    [Required]
-    [EmailAddress]
-    public string ManufacturerEmail { get; set; } = string.Empty;
+    [Required] 
+    [EmailAddress] 
+    public string ManufacturerEmail { get; set; } = null!;
 
     [Required]
     [RegularExpression("^09[0|1|2|3][0-9]{8}$")]
-    public string ManufacturerPhone { get; set;} = string.Empty;
+    public string ManufacturerPhone { get; set;} = null!;
 
     public bool IsAvailable { get; set; }
 
     [Required]
-    public string CreatorId { get; set; } = string.Empty;
+    public string CreatorUserName { get; set; } = null!;
 }

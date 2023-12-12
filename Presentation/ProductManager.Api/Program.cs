@@ -1,12 +1,11 @@
-using System.Reflection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using ProductManager.Api.Extensions;
 using ProductManager.Application.DTOs.Configuration;
 using ProductManager.Data.Context;
 using ProductManager.IoC.Container;
 using System.Text;
-using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,8 +17,6 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.UseIoC(builder.Configuration);
 builder.Services.Configure<JwtConfigurationDto>(builder.Configuration.GetSection("JWT"));
-
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies()));
 
 
 #region Identity
@@ -56,6 +53,15 @@ builder.Services.AddAuthentication(options =>
 
 var app = builder.Build();
 
+#region Auto Migrate
+
+app.MigrateDatabase<ProductManagerContext>((context, services) =>
+{
+    var logger = services.GetService<ILogger<ProductManagerContextSeed>>();
+    if (logger != null) ProductManagerContextSeed.SeedAsync(context, logger).Wait();
+});
+
+#endregion
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

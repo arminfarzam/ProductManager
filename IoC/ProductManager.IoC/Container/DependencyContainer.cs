@@ -1,10 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ProductManager.Data.Context;
+using ProductManager.Data.Repositories.Common;
+using ProductManager.Domain.Repositories.Common;
 using System.Reflection;
-using ProductManager.Application.Services.Implementations;
-using ProductManager.Application.Services.Interfaces;
 
 
 namespace ProductManager.IoC.Container;
@@ -21,20 +22,29 @@ public static class DependencyContainer
 
         #region MediatR
 
-        //serviceCollection.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
-        //serviceCollection.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(AppDomain.CurrentDomain.GetAssemblies()));
-
+        serviceCollection.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies()));
+        serviceCollection.AddScoped<Mediator>();
         #endregion
 
         #region AutoMapper
 
-        serviceCollection.AddAutoMapper(Assembly.GetExecutingAssembly());
+        serviceCollection.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
         #endregion
 
         #region Service Dependencies
 
-        serviceCollection.AddTransient<IAuthenticationService, AuthenticationService>();
+        serviceCollection.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+
+        #endregion
+
+        #region Add Services
+
+        serviceCollection.Scan(s =>
+            s.FromAssemblies(Assembly.Load("ProductManager.Application"))
+                .AddClasses(c => c.Where(e => e.Name.EndsWith("Service")))
+                .AsImplementedInterfaces()
+                .WithTransientLifetime());
 
         #endregion
 

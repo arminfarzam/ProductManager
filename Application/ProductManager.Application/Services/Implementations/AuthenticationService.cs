@@ -50,13 +50,12 @@ public class AuthenticationService : IAuthenticationService
                 new(ClaimTypes.Name, user.UserName!)
             };
             var token = CreateToken(authClaims);
-            var result= new AuthResponseDto()
+            return new AuthResponseDto()
             {
                 AccessToken = new JwtSecurityTokenHandler().WriteToken(token),
                 Expiration = token.ValidTo,
                 UserId = user.Id
             };
-            return result;
         }
         throw new Exception("UserName Or Password Is Invalid");
     }

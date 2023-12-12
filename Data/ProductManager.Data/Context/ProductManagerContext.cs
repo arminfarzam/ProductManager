@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using ProductManager.Domain.Entities.Common;
 using ProductManager.Domain.Entities.Product;
 
 namespace ProductManager.Data.Context;
@@ -23,9 +24,23 @@ public class ProductManagerContext:IdentityDbContext
 
         #region Modify MetaDataIndex
 
-        builder.Entity<Product>().HasIndex(p => new { p.ProduceDate, p.ManufacturerEmail }).HasDatabaseName("ProductIndex").IsUnique();
+        builder.Entity<Product>().HasIndex(p => new { p.CreateDate, p.ManufacturerEmail }).HasDatabaseName("ProductIndex").IsUnique();
 
         #endregion
 
+    }
+
+    public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
+    {
+        foreach (var entry in ChangeTracker.Entries<BaseEntity>())
+        {
+            entry.Entity.LastModifiedDate = DateTime.Now;
+
+            if (entry.State == EntityState.Added)
+            {
+                entry.Entity.CreateDate = DateTime.Now;
+            }
+        }
+        return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
     }
 }
