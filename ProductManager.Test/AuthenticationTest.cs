@@ -54,9 +54,7 @@ public class AuthenticationTest
             ValidAudience = "",
             TokenValidityInMinutes = 60
         };
-        services.AddSingleton<IOptions<JwtConfigurationDto>>(Options.Create(jwtConfiguration));
-
-        services.AddOptions();
+        services.AddSingleton(Options.Create(jwtConfiguration));
         services.AddOptions();
         var dbContextOptions = new DbContextOptionsBuilder<ProductManagerContext>()
             .UseInMemoryDatabase(databaseName: "TestDatabase")

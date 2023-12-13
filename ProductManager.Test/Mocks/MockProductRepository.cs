@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using Microsoft.EntityFrameworkCore;
+using Moq;
 using ProductManager.Domain.Entities.Product;
 using ProductManager.Domain.Repositories.Common;
 
@@ -32,9 +33,15 @@ public static class MockProductRepository
                 LastModifiedDate = DateOnly.FromDateTime(DateTime.Now.AddDays(-3)),
                 CreatorUserName = "arminfrzm73"
             }
-        }.AsQueryable();
-        var mockRepo=new Mock<IGenericRepository<Product>>();
-        mockRepo.Setup(r => r.GetEntitiesQueryable()).Returns(products);
+        }.AsEnumerable();
+        var mockRepo = new Mock<IGenericRepository<Product>>();
+        var productsList = products.ToList();
+        mockRepo.Setup(r => r.GetEntitiesQueryable()).Returns(productsList.AsQueryable);
+        mockRepo.Setup(r => r.AddEntity(It.IsAny<Product>())).Returns((Product product) =>
+        {
+            productsList.Add(product);
+            return productsList;
+        });
         return mockRepo;
     }
 }
