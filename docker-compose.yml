@@ -1,0 +1,11 @@
+version: '3.4'
+
+services:
+  productmanagerdb:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+
+  productmanager.api:
+    image: ${DOCKER_REGISTRY-}productmanagerapi
+    build:
+      context: .
+      dockerfile: Presentation/ProductManager.Api/Dockerfile
