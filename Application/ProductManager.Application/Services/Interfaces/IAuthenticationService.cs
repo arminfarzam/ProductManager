@@ -4,6 +4,6 @@ namespace ProductManager.Application.Services.Interfaces;
 
 public interface IAuthenticationService
 {
-    Task RegisterUser(RegisterUserDto registerUserDto);
+    Task<bool> RegisterUser(RegisterUserDto registerUserDto);
     Task<AuthResponseDto> LoginUser(LoginUserDto loginUserDto);
 }

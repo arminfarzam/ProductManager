@@ -20,7 +20,7 @@ public class AuthenticationService : IAuthenticationService
         _jwtConfiguration = jwtOptions.Value;
     }
 
-    public async Task RegisterUser(RegisterUserDto registerUserDto)
+    public async Task<bool> RegisterUser(RegisterUserDto registerUserDto)
     {
         var userExists = await _userManager.FindByNameAsync(registerUserDto.Username);
         if (userExists != null) throw new Exception("UserName is Already Exist");
@@ -36,6 +36,7 @@ public class AuthenticationService : IAuthenticationService
         var result = await _userManager.CreateAsync(user, registerUserDto.Password);
         if (!result.Succeeded)
             throw new Exception(string.Join(Environment.NewLine, result.Errors.Select(e => e.Description)));
+        return result.Succeeded;
     }
 
     public async Task<AuthResponseDto> LoginUser(LoginUserDto loginUserDto)
