@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using ProductManager.Application.DTOs.Product;
@@ -6,6 +7,8 @@ using ProductManager.Application.Features.Product.Query;
 using ProductManager.Application.Mapping;
 using ProductManager.Application.Services.Implementations;
 using ProductManager.Application.Services.Interfaces;
+using ProductManager.Data.Context;
+using ProductManager.Data.Repositories.Common;
 using ProductManager.Domain.Entities.Product;
 using ProductManager.Domain.Repositories.Common;
 using ProductManager.Test.Mocks;
@@ -28,26 +31,66 @@ public class ProductTest
     }
 
     [Fact]
-    public async Task GetProductsShouldReturnFilteredProducts()
+    public async Task TestGetProductsService()
     {
-        // Arrange
+        //arrange
+        var serviceProvider = GetServiceProvider();
+        var productService = serviceProvider.GetRequiredService<IProductService>();
         var filter = new FilterProductsDto()
         {
             PageNumber = 1,
             PageSize = 20
         };
-
-        var productService = new ProductService(_mockRepository.Object, _mapper);
+        var addProductDto = new AddOrEditProductDto()
+        {
+            Name = "Galaxy S23",
+            ManufacturerEmail = "sam4@gmail.com",
+            ManufacturerPhone = "09216443851",
+            IsAvailable = false
+        };
+        await productService.AddProduct(addProductDto, "arminfrzm72");
 
         // Act
         var result = await productService.GetProducts(filter);
 
-        // Assert
-        Assert.NotNull(result);
+        //assert
+        result.ShouldNotBeNull();
+        result.Products!.Count.ShouldBeGreaterThan(0);
     }
 
+
     [Fact]
-    public async Task AddProduct()
+    public async Task TestGetProductsQueryHandler()
+    {
+        //arrange
+        var serviceProvider = GetServiceProvider();
+        var productService = serviceProvider.GetRequiredService<IProductService>();
+        var filter = new FilterProductsDto()
+        {
+            PageNumber = 1,
+            PageSize = 20
+        };
+        var addProductDto = new AddOrEditProductDto()
+        {
+            Name = "Galaxy S23",
+            ManufacturerEmail = "sam4@gmail.com",
+            ManufacturerPhone = "09216443851",
+            IsAvailable = false
+        };
+        await productService.AddProduct(addProductDto, "arminfrzm72");
+
+        // Act
+        var handler = new GetProductsQueryHandler(productService);
+        var result = await handler.Handle(new GetProductsQuery(filter), CancellationToken.None);
+
+        //assert
+        Assert.NotNull(result);
+        result.Products!.Count.ShouldBeGreaterThan(0);
+    }
+
+
+    [Fact]
+    public async Task TestAddProduct()
     {
         // Arrange
         var initialProductCount = 2;
@@ -68,43 +111,55 @@ public class ProductTest
     }
 
     [Fact]
-    public async Task TestGetProductsService()
+    public async Task TestEditProduct()
     {
-        //arrange
-        var serviceProvider = GetServiceProvider();
-        var productService = serviceProvider.GetRequiredService<IProductService>();
-        var filter = new FilterProductsDto()
+        // Arrange
+        var productService = new ProductService(_mockRepository.Object, _mapper);
+        var editProductDto = new AddOrEditProductDto()
         {
-            PageNumber = 1,
-            PageSize = 20
+            Id = Guid.Parse("e4858aff-77e3-477e-2d94-08dbfb53603b"),
+            Name = "Galaxy A8",
+            ManufacturerEmail = "samsung@gmail.com",
+            ManufacturerPhone = "09215483856",
+            IsAvailable = true,
         };
 
-        //act
-        var result = await productService.GetProducts(filter);
+        // Act
+        await productService.EditProduct(editProductDto, "arminfrzm72");
+        var editedProduct = _mockRepository.Object.GetEntitiesQueryable().FirstOrDefault(p => p.Id == Guid.Parse("e4858aff-77e3-477e-2d94-08dbfb53603b"));
 
-        //assert
-        result.ShouldNotBeNull();
+        // Assert
+        editedProduct!.Name.ShouldBe("Galaxy A8");
     }
+
 
     [Fact]
-    public async Task TestGetProductsQueryHandler()
+    public async Task TestRemoveProduct()
     {
-        var serviceProvider = GetServiceProvider();
-        var productService = serviceProvider.GetRequiredService<IProductService>();
-        var filter = new FilterProductsDto()
-        {
-            PageNumber = 1,
-            PageSize = 20
-        };
-        var handler = new GetProductsQueryHandler(productService);
-        var result = await handler.Handle(new GetProductsQuery(filter), CancellationToken.None);
-        Assert.NotNull(result);
+        // Arrange
+        var productService = new ProductService(_mockRepository.Object, _mapper);
+        var productIdToRemove = Guid.Parse("e4858aff-77e3-477e-2d94-08dbfb53603b");
+
+        // Act
+        await productService.DeleteProduct(productIdToRemove, "arminfrzm72");
+
+        // Assert
+        var productsAfterRemoval = _mockRepository.Object.GetEntitiesQueryable().ToList();
+        Assert.DoesNotContain(productsAfterRemoval, p => p.Id == productIdToRemove);
     }
+
+    #region Handle Services
 
     private IServiceProvider GetServiceProvider()
     {
         var services = new ServiceCollection();
         services.AddScoped<IProductService, ProductService>();
+        var dbContextOptions = new DbContextOptionsBuilder<ProductManagerContext>().UseInMemoryDatabase(databaseName: "TestDatabase").Options;
+        services.AddSingleton(new ProductManagerContext(dbContextOptions));
+        services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+        services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
         return services.BuildServiceProvider();
     }
+
+    #endregion
 }

@@ -27,7 +27,8 @@ public class ProductService:IProductService
             productsQuery = productsQuery.Where(p => p.Name.Contains(filter.SearchQuery)|| p.CreatorUserName.Contains(filter.SearchQuery));
 
         //Handle Pagination
-        var pageCount = (int)Math.Ceiling(productsQuery.Count() / (double)filter.PageSize);
+        var totalCount = productsQuery.Count();
+        var pageCount = (int)Math.Ceiling(totalCount / (double)filter.PageSize);
         var pager = Pager.Build(filter.PageNumber, filter.PageSize, pageCount);
         var products = await productsQuery.Paging(pager).Select(p => _mapper.Map<ProductDto>(p)).ToListAsync();
         return filter.SetProducts(products).SetPaging(pager);
